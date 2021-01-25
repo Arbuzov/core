@@ -2,10 +2,79 @@
 import asyncio
 from unittest.mock import patch
 
+import pytest
 from zwave_js_server.version import VersionInfo
 
 from homeassistant import config_entries, setup
 from homeassistant.components.zwave_js.const import DOMAIN
+
+ADDON_DISCOVERY_INFO = {
+    "addon": "OpenZWave",
+    "host": "host1",
+    "port": 1234,
+    "username": "name1",
+    "password": "pass1",
+}
+
+
+@pytest.fixture(name="supervisor")
+def mock_supervisor_fixture():
+    """Mock Supervisor."""
+    with patch("homeassistant.components.hassio.is_hassio", return_value=True):
+        yield
+
+
+@pytest.fixture(name="addon_info")
+def mock_addon_info():
+    """Mock Supervisor add-on info."""
+    with patch("homeassistant.components.hassio.async_get_addon_info") as addon_info:
+        addon_info.return_value = {}
+        yield addon_info
+
+
+@pytest.fixture(name="addon_running")
+def mock_addon_running(addon_info):
+    """Mock add-on already running."""
+    addon_info.return_value["state"] = "started"
+    return addon_info
+
+
+@pytest.fixture(name="addon_installed")
+def mock_addon_installed(addon_info):
+    """Mock add-on already installed but not running."""
+    addon_info.return_value["state"] = "stopped"
+    addon_info.return_value["version"] = "1.0"
+    return addon_info
+
+
+@pytest.fixture(name="addon_options")
+def mock_addon_options(addon_info):
+    """Mock add-on options."""
+    addon_info.return_value["options"] = {}
+    return addon_info.return_value["options"]
+
+
+@pytest.fixture(name="set_addon_options")
+def mock_set_addon_options():
+    """Mock set add-on options."""
+    with patch(
+        "homeassistant.components.hassio.async_set_addon_options"
+    ) as set_options:
+        yield set_options
+
+
+@pytest.fixture(name="install_addon")
+def mock_install_addon():
+    """Mock install add-on."""
+    with patch("homeassistant.components.hassio.async_install_addon") as install_addon:
+        yield install_addon
+
+
+@pytest.fixture(name="start_addon")
+def mock_start_addon():
+    """Mock start add-on."""
+    with patch("homeassistant.components.hassio.async_start_addon") as start_addon:
+        yield start_addon
 
 
 async def test_manual(hass):
