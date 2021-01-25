@@ -2,7 +2,7 @@
   "title": "Z-Wave JS",
   "config": {
     "step": {
-      "user": {
+      "manual": {
         "data": {
           "url": "[%key:common::config_flow::data::url%]"
         }

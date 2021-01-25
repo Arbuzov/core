@@ -25,6 +25,11 @@
             "install_addon": {
                 "title": "The Z-Wave JS add-on installation has started"
             },
+            "manual": {
+                "data": {
+                    "url": "URL"
+                }
+            },
             "on_supervisor": {
                 "data": {
                     "use_addon": "Use the Z-Wave JS Supervisor add-on"
@@ -38,11 +43,6 @@
                     "usb_path": "USB Device Path"
                 },
                 "title": "Enter the Z-Wave JS add-on configuration"
-            },
-            "user": {
-                "data": {
-                    "url": "URL"
-                }
             }
         }
     },
